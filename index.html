@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoJo's Bizarre Adventure Wiki</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #00d37b; 
+            --accent-color: #ffd700;  
+            --bg-color: #f1f1ed;
+            --text-color: #333;
+            --card-bg: #dbbf94;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --primary-color: #9d4edd; 
+            --accent-color: #7171e2;  
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s, color 0.3s;
+            line-height: 1.6;
+        }
+
+        .main-header {
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+        }
+
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        .main-nav ul li {
+            margin: 0 15px;
+        }
+
+        .main-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .main-nav ul li a:hover {
+            color: var(--accent-color);
+        }
+
+        .api-quote-container {
+            background: linear-gradient(135deg, #d400ff, #a020f0);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            font-style: italic;
+        }
+
+        .quote-box p {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .quote-box span {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .wiki-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .wiki-section {
+            margin-bottom: 40px;
+        }
+
+        .wiki-section h1 {
+            border-left: 5px solid var(--primary-color);
+            padding-left: 10px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .wiki-section h2 {
+            border-left: 5px solid var(--primary-color);
+            padding-left: 10px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .wiki-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .wiki-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .card-body h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+            color: #333;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .main-footer {
+            background-color: #222;
+            color: #888;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        #parts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+}
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <h1>JOJO WIKI FANMADE BY TRISNHAN - T1K18</h1>
+        </div>
+        <button id="theme-toggle-btn" class="btn-secondary">Chế độ tối 🌙</button>
+    </header>
+    <section class="api-quote-container">
+        <div class="quote-box">
+            <p id="jojo-quote">"Đang tải câu nói..."</p>
+            <span id="quote-author">- JoJo</span>
+        </div>
+    </section>
+    
+    <section>
+        <div>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMDaEnKOr1DhdRYu-usz_WUTXrS3yx68DtSapbdscqg5CPWYk6s5oJgrGV&s=10" style="display: block; margin: 20px auto; width: 1000px; border-radius: 8px;" alt="JoJo Banner">
+        </div>
+    </section>
+    
+    <main1 class="wiki-container">
+        <section id="intro" class="wiki-section">
+    <articale><h2>Tại Sao Là JoJo?</h2>
+            <article><p>Đơn giản vì Jojo PEAK vcl. Dăm ba cái JJK, one punch man,... tuổi 🤡👽👹🐧🐧🐧 
+
+            </p></article></section></main1>
+    
+    <main2 class="wiki-container">
+        <section id="intro" class="wiki-section">
+            <h2>Giới Thiệu Chung</h2>
+            <article class="intro-content">
+                <p>Toshiyuki Araki (tiếng Nhật: 荒木 利之, Hepburn: Araki Toshiyuki; sinh ngày 7 tháng 6 năm 1960), được biết đến nhiều hơn với tên Hirohiko Araki (荒木 飛呂彦, Araki Hirohiko), là một họa sĩ truyện tranh Nhật Bản. Ông nổi tiếng nhất với loạt truyện dài kỳ JoJo's Bizarre Adventure, bắt đầu được xuất bản trên Weekly Shōnen Jump vào năm 1987.</p>
+                <p>JoJo's Bizarre Adventure là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Hirohiko Araki, nổi tiếng với phong cách nghệ thuật độc đáo và các trận chiến tư duy đỉnh cao.</p>
+            <ol>Xem thêm tại:
+                <li>https://vi.wikipedia.org/wiki/JoJo_no_Kimy%C5%8D_na_B%C5%8Dken
+
+                </li>
+                <li>https://jojowiki.com/
+                    
+                </li>
+            </ol>
+                </article>
+        </section>
+        <section id="search-section" class="wiki-section">
+            <h2>Tìm Kiếm & Khám Phá</h2>
+            <div class="search-box">
+                <input type="text" id="wiki-search-input" placeholder="Nhập tên phần truyện">
+                <button id="search-btn" class="btn-primary">Tìm kiếm</button>
+            </div>
+        </section>
+        <section id="parts" class="wiki-section">
+    <h2>Các Phần Truyện</h2>
+    <div class="grid-container" id="parts-grid">
+        <article class="wiki-card" data-name="Phantom Blood">
+            <div class="card-image">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMUhyCUwVEOzDcQmhg1HtF_8oJfTfIohR5BDz-NSGmyg&s" alt="Part 1">
+            </div>
+            <div class="card-body">
+                <h3>Part 1: Phantom Blood</h3>
+                <p><strong>Nhân vật chính:</strong> Jonathan Joestar</p>
+                <p class="card-desc"> Mối thâm thù thế kỷ bắt đầu khi Dio Brando được gia đình Joestar nhận nuôi. Dio dùng chiếc Mặt nạ Đá cổ xưa để biến thành ma cà rồng nhằm chiếm đoạt gia sản. Jonathan phải học Hamon từ bậc thầy Zeppeli để ngăn chặn người anh em nuôi độc ác của mình.</p>
+            </div>
+        </article>
+        
+        <article class="wiki-card" data-name="Battle Tendency">
+            <div class="card-image">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRORwst9TknYYfuJL_INAjKH5sefRvy0epF4Xw1A2bDIQ&s=10" alt="Part 2">
+            </div>
+            <div class="card-body">
+                <h3>Part 2: Battle Tendency</h3>
+                <p><strong>Nhân vật chính:</strong> Joseph Joestar</p>
+                <p class="card-desc"> Joseph – một chàng trai lém lỉnh, thông minh – phải đối đầu với Pillar Men (Trụ Nhân). Đây là chủng tộc siêu nhân cổ đại, tổ tiên của ma cà rồng và là những kẻ tạo ra Mặt nạ Đá. Joseph cùng những người đồng đội phải luyện Hamon cấp tốc để bảo vệ viên đá Red Stone of Aja khỏi tay chúng.</p>
+            </div>
+        </article>
+
+        <article class="wiki-card" data-name="Stardust Crusaders">
+            <div class="card-image">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXmi9RUP_5QNVKbYFkYe-_NG37XYF2-jKVaSqZSnJJAQ&s=10" alt="Part 3">
+            </div>
+            <div class="card-body">
+                <h3>Part 3: Stardust Crusaders</h3>
+                <p><strong>Nhân vật chính:</strong> Jotaro Kujo</p>
+                <p class="card-desc"> Phần truyện giới thiệu hệ thống sức mạnh biểu tượng: Stand. Dio tái sinh bằng cách chiếm lấy thân xác của Jonathan. Lời nguyền từ Dio khiến mẹ của Jotaro lâm bệnh nặng. Jotaro cùng ông ngoại Joseph và nhóm bạn lập đội vượt ngàn dặm để tiêu diệt Dio trong vòng 50 ngày.</p>
+            </div>
+        </article>
+           
+        <article class="wiki-card" data-name="Diamond Is Unbreakable">
+            <div class="card-image">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAawFo4OyF1DyE3xZR2Trnzt5mQELAsSDnB-GemFk5pg&s" alt="Part 4">
+            </div>
+            <div class="card-body">
+                <h3>Part 4: Diamond Is Unbreakable</h3>
+                <p><strong>Nhân vật chính:</strong> Josuke Higashikata</p>
+                <p class="card-desc"> Lấy bối cảnh năm 1999 tại thị trấn Morioh (Nhật Bản), xoay quanh Josuke Higashikata — con trai ngoài giá thú của Joseph Joestar — trong hành trình bảo vệ quê hương khỏi các hiểm họa từ "Cung và Tên" (Stand Arrow), đồng thời truy lùng Yoshikage Kira - kẻ sát nhân hàng loạt ẩn mình dưới danh nghĩa nhân viên văn phòng bình thường.</p>
+            </div>
+        </article>
+    
+        <article class="wiki-card" data-name="Vento Aureo(Golden Wind)">
+            <div class="card-image">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQk_BFmtYWadgISODLG40gise14D9gJbRQbTs6PLrlZw&s=10" alt="Part 5">
+            </div>
+            <div class="card-body">
+                <h3>Part 5: Vento Aureo (Golden Wind)</h3>
+                <p><strong>Nhân vật chính:</strong> Giorno Giovanna</p>
+                <p class="card-desc"> Xoay quanh Giorno Giovanna, con trai của DIO mang dòng máu Joestar, với ước mơ trở thành "GangStar" để thanh lọc băng đảng Passione khỏi nạn ma túy. Cùng nhóm của Bruno Bucciarati phản bội ông trùm Diavolo, Giorno bảo vệ Trish Una và thức tỉnh Gold Experience Requiem để đánh bại Diavolo, bước lên ngôi trùm mới mang lại bình yên cho Ý.</p>
+            </div>
+        </article>
+    
+         <article class="wiki-card" data-name="Stone Ocean">
+            <div class="card-image">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYhB3qy6CV9OnyfBPaS0AB7PddOb-i5GW8BklRgq8dAg&s=10" alt="Part 6">
+            </div>
+            <div class="card-body">
+                <h3>Part 6: Stone Ocean</h3>
+                <p><strong>Nhân vật chính:</strong> Jolyne Cujoh</p>
+                <p class="card-desc"> Kể về Jolyne Cujoh bị vu oan và giam cầm tại nhà tù Florida, nơi cô thức tỉnh Stand Stone Free. Jolyne phải ngăn chặn âm mưu "thiên đường" của linh mục Enrico Pucci (kẻ tôn sùng DIO) nhằm đánh cắp ký ức của Jotaro. Cuối cùng, cậu bé Emporio sống sót, kết liễu Pucci và mở ra một vũ trụ mới bình yên hơn.</p>
+            </div>
+        </article>
+            
+        <article class="wiki-card" data-name="Steel Ball Run">
+            <div class="card-image">
+                <img src="https://i.redd.it/1wi1yfu34l9h1.jpeg" alt="Part 7">
+            </div>
+            <div class="card-body">
+                <h3>Part 7: Steel Ball Run</h3>
+                <p><strong>Nhân vật chính:</strong> Johnny Joestar</p>
+                <p class="card-desc"> Kể về cuộc đua ngựa xuyên lục địa Bắc Mỹ vào năm 1890, nơi Johnny Joestar – một cựu kỵ sĩ bị liệt nửa người, tham gia sau khi phát hiện ra vũ khí "Quả bóng thép" (Steel Ball) của Gyro Zeppeli có thể giúp đôi chân mình cử động lại. Tuy nhiên, đằng sau cuộc đua khắc nghiệt này thực chất là một âm mưu chính trị lớn do Tổng thống Mỹ Funny Valentine vạch ra nhằm thu thập các mảnh "Xác Thánh" (Holy Corpse) sở hữu quyền năng tối thượng, buộc Johnny và Gyro phải vừa đua vừa chiến đấu sinh tử chống lại các sát thủ và những đối thủ đáng gờm khác.</p>
+              </div>
+        </article>
+            
+        <article class="wiki-card" data-name="Jojolion">
+            <div class="card-image">
+                <img src="https://i.redd.it/0dxzccbv5pjd1.jpeg" alt="Part 8">
+            </div>
+            <div class="card-body">
+                <h3>Part 8: Jojolion</h3>
+                <p><strong>Nhân vật chính:</strong> Josuke Higashikata (Gappy)</p>
+                <p class="card-desc"> Bắt đầu khi một chàng trai trẻ mất trí nhớ, có đặc điểm cơ thể kỳ lạ là bốn tinh hoàn, được tìm thấy tại vùng đất thảm họa "Mắt Bức Tường" ở thị trấn Morioh và được đặt tên là Josuke Higashikata. Trong hành trình tìm lại thân thế thực sự, Josuke phát hiện ra mình là kết quả của một sự dung hợp cơ thể thần bí, đồng thời bị cuốn vào cuộc chiến khốc liệt với chủng tộc "Thạch Nhân" (Rock Humans) bí ẩn. Cuộc chiến này nhằm tranh giành Locacaca – một loại trái cây có khả năng hoán đổi tương đương để chữa bách bệnh nhưng cũng ẩn chứa những âm mưu đen tối đe dọa sự sống còn của gia tộc Higashikata đã nhận nuôi anh.</p>
+            </div>
+        </article>
+        
+        <article class="wiki-card" data-name="Jojolands">
+            <div class="card-image">
+                <img src="https://w9.jojolandsmanga.com/wp-content/uploads/2025/01/The-JOJOLands-Manga-Volume-5.webp" alt="Part 9">
+            </div>
+            <div class="card-body">
+                <h3>Part 9: Jojolands</h3>
+                <p><strong>Nhân vật chính:</strong> Jodio Joestar</p>
+                <p class="card-desc"> Lấy bối cảnh tại Hawaii, xoay quanh Jodio Joestar, một thiếu niên 15 tuổi mang tham vọng trở thành ông lớn của thế giới ngầm và sự giàu. Jodio cùng anh/chị(người chuyển giới) mình là Dragona và đồng bọn lập thành một băng nhóm tội phạm vị thành niên, hoạt động dưới sự chỉ đạo của bà trùm Meryl Mei Qi. Câu chuyện bắt đầu bằng phi vụ đột nhập biệt thự của họa sĩ manga Rohan Kishibe để đánh cắp một viên kim cương quý giá, nhưng sau đó nhanh chóng cuốn nhóm của Jodio vào một âm mưu lớn hơn nhiều: cuộc chiến sinh tử chống lại tập đoàn Howler hùng mạnh để tranh giành quyền sở hữu các vùng đất đai và tài sản giá trị hàng triệu đô-la thông qua những trận chiến Stand vô cùng khốc liệt.</p>
+              </div>
+        </article>
+    </div>
+</section>
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 JoJo's Bizarre Adventure Fan Wiki. Design by TrisNhan.</p>
+    </footer>
+
+    <script>
+        async function fetchRandomQuote() {
+            const quoteElement = document.getElementById('jojo-quote');
+            const authorElement = document.getElementById('quote-author');
+
+            try {
+                const response = await fetch('https://api.quotable.io/random');
+                if (!response.ok) throw new Error('Mạng lỗi');
+                const data = await response.json();
+                quoteElement.innerText = `"${data.content}"`;
+                authorElement.innerText = `- ${data.author}`;
+            } catch (error) {
+                const jojoQuotes = [
+                    { text: "Yare Yare Daze...", author: "Jotaro Kujo" },
+                    { text: "Kono DIO da!! Mudaaaa", author: "Dio Brando" },
+                    { text: "Kono Giorno Giovanna niwa yume ga aru!", author: "Giorno Giovanna" },
+                    { text: "Sanraito Ierō Ōbādoraibu!", author: "Jonathan Joestar" }
+                ];
+                const randomIdx = Math.floor(Math.random() * jojoQuotes.length);
+                quoteElement.innerText = `"${jojoQuotes[randomIdx].text}"`;
+                authorElement.innerText = `- ${jojoQuotes[randomIdx].author}`;
+            }
+        }
+        function setupSearchFunction() {
+            const searchInput = document.getElementById('wiki-search-input');
+            const searchBtn = document.getElementById('search-btn');
+            const cards = document.querySelectorAll('.wiki-card');
+
+            function performSearch() {
+                const query = searchInput.value.toLowerCase().trim();
+                cards.forEach(card => {
+                    const cardDataName = card.getAttribute('data-name').toLowerCase();
+                    if (cardDataName.includes(query)) {
+                        card.style.display = "block";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            }
+
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+        function setupThemeToggle() {
+            const toggleBtn = document.getElementById('theme-toggle-btn');
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                toggleBtn.innerText = "Chế độ sáng ☀️";
+            }
+
+            toggleBtn.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                
+                if (currentTheme === 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    toggleBtn.innerText = "Chế độ tối 🌙";
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    toggleBtn.innerText = "Chế độ sáng ☀️";
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRandomQuote();
+            setupSearchFunction();
+            setupThemeToggle();
+        });
+    </script>
+</body>
+</html>
